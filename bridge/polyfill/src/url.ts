@@ -136,7 +136,7 @@ export class URL {
       rawQuery = '',
       seenAt = false,
       seenBracket = false,
-      errors = [];
+      errors: string[] = [];
 
     function err(message: string) {
       errors.push(message);
@@ -493,7 +493,7 @@ export class URL {
 
       cursor++;
     }
-    
+
     // Handle unicode in query.
     for (let char of rawQuery) {
       this._query += percentEscapeQuery(char);

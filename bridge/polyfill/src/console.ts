@@ -4,7 +4,7 @@
 */
 
 // https://console.spec.whatwg.org/
-import { webfPrint, webfIsProxy } from './bridge';
+import { webfIsProxy, webfPrint } from './bridge';
 
 const SEPARATOR = ' ';
 const INTERPOLATE = /%[sdifoO]/g;
@@ -102,7 +102,7 @@ function formatter(obj: any, limit: number, stack: Array<any>): string {
     return result + '}';
   }
 
-  var items = [];
+  var items: string[] = [];
   for (var n = 0; n < keys.length; n++) {
     let key = keys[n];
     var value = formatter(obj[key], limit - 1, [...stack]);
@@ -182,7 +182,7 @@ function inspect(obj: any, within?: boolean): string {
           return result + "}";
         }
         keys = keys.sort();
-        var properties = [];
+        var properties: string[] = [];
         for (var n = 0; n < keys.length; n++) {
           key = keys[n];
           try {
@@ -200,7 +200,7 @@ function inspect(obj: any, within?: boolean): string {
 function logger(allArgs: any) {
   var args = Array.prototype.slice.call(allArgs, 0);
   var firstArg = args[0];
-  var result = [];
+  var result: string[] = [];
   if (typeof firstArg === 'string' && INTERPOLATE.test(firstArg)) {
     args.shift();
     result.push(firstArg.replace(INTERPOLATE, function () {
@@ -218,7 +218,7 @@ export const console = {
     printer(logger(arguments));
   },
   inspect(...args: any) {
-    var result = [];
+    var result: string[] = [];
     for (var i = 0; i < arguments.length; i++) {
       result.push(formatter(arguments[i], Number.MAX_VALUE, []));
     }
@@ -240,7 +240,7 @@ export const console = {
     printer(logger(arguments));
   },
   dir(...args: any) {
-    var result = [];
+    var result: string[] = [];
     for (var i = 0; i < arguments.length; i++) {
       result.push(formatter(arguments[i], DIMENSIONS, []));
     }

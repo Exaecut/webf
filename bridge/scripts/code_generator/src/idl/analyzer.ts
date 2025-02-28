@@ -1,16 +1,17 @@
-import ts, {HeritageClause, ScriptTarget, VariableStatement} from 'typescript';
-import {IDLBlob} from './IDLBlob';
 import {
   ClassObject,
   ClassObjectKind,
-  FunctionArguments,
   FunctionArgumentType,
+  FunctionArguments,
   FunctionDeclaration,
   FunctionObject,
   IndexedPropertyDeclaration,
   ParameterMode,
   PropsDeclaration,
 } from './declaration';
+import ts, {HeritageClause, ScriptTarget, VariableStatement} from 'typescript';
+
+import {IDLBlob} from './IDLBlob';
 import {isUnionType} from "./generateSource";
 
 interface DefinedPropertyCollector {
