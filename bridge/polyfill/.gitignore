@@ -1,2 +1,5 @@
 dist
+!dist/polyfill.cc
+!dist/polyfill.h
+!dist/testframework.cc
 package-lock.json

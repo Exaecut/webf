@@ -1,14 +1,17 @@
-import {ParameterType} from "./analyzer";
-import {FunctionArgumentType} from "./declaration";
-import _ from "lodash";
-import {generateUnionTypeHeader} from "./generateHeader";
 import {
   generateCoreTypeValue,
-  generateUnionTypeSource, isDictionary,
+  generateUnionTypeSource,
+  isDictionary,
   isPointerType,
-  isTypeHaveNull, isUnionType,
+  isTypeHaveNull,
+  isUnionType,
   trimNullTypeFromType
 } from "./generateSource";
+
+import {FunctionArgumentType} from "./declaration";
+import {ParameterType} from "./analyzer";
+import _ from "lodash";
+import {generateUnionTypeHeader} from "./generateHeader";
 
 export function generateUnionTypeFileName(unionType: ParameterType[]) {
   let filename = 'qjs_union';
@@ -57,7 +60,7 @@ export function getUnionTypeName(unionType: ParameterType) {
 }
 
 export function generateUnionContentType(unionTypes: ParameterType[]) {
-  let result = [];
+  let result: string[] = [];
   for (let i = 0; i < unionTypes.length; i++) {
     if (isTypeHaveNull(unionTypes[i])) continue;
     result.push('k' + getUnionTypeName(unionTypes[i]));

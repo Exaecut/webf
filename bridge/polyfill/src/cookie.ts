@@ -8,7 +8,7 @@ const cookieStorage = {};
 // @TODO Persisent cookie and Session cookie support
 export const cookie = {
   get: () => {
-    const output = [];
+    const output: string[] = [];
     for (let cookieName in cookieStorage) {
       output.push(cookieName + '=' + cookieStorage[cookieName]);
     }
@@ -16,8 +16,8 @@ export const cookie = {
   },
   set: (str: String) => {
     const cookieStr = str.toString().trim();
-    let key;
-    let value;
+    let key: string;
+    let value: string = '';
 
     if (cookieStr.indexOf('=') === -1) {
       key = '';
@@ -36,6 +36,7 @@ export const cookie = {
         }
       }
     }
+
     cookieStorage[key] = value;
   }
 };

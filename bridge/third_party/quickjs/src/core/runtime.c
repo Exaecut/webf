@@ -2184,6 +2184,10 @@ static const JSCFunctionListEntry js_array_iterator_proto_funcs[] = {
     JS_PROP_STRING_DEF("[Symbol.toStringTag]", "Array Iterator", JS_PROP_CONFIGURABLE),
 };
 
+#define CONST_NAN      ((double)(0x7FF8000000000000ULL)) // NaN
+#define CONST_INF      ((double)(0x7FF0000000000000ULL)) // Infinity
+#define CONST_NEG_INF  ((double)(0xFFF0000000000000ULL)) // -Infinity
+
 /* Number */
 static const JSCFunctionListEntry js_number_funcs[] = {
     /* global ParseInt and parseFloat should be defined already or delayed */
@@ -2195,9 +2199,9 @@ static const JSCFunctionListEntry js_number_funcs[] = {
     JS_CFUNC_DEF("isSafeInteger", 1, js_number_isSafeInteger),
     JS_PROP_DOUBLE_DEF("MAX_VALUE", 1.7976931348623157e+308, 0),
     JS_PROP_DOUBLE_DEF("MIN_VALUE", 5e-324, 0),
-    JS_PROP_DOUBLE_DEF("NaN", NAN, 0),
-    JS_PROP_DOUBLE_DEF("NEGATIVE_INFINITY", -INFINITY, 0),
-    JS_PROP_DOUBLE_DEF("POSITIVE_INFINITY", INFINITY, 0),
+    JS_PROP_DOUBLE_DEF("NaN", CONST_NAN, 0),
+    JS_PROP_DOUBLE_DEF("NEGATIVE_INFINITY", CONST_NEG_INF, 0),
+    JS_PROP_DOUBLE_DEF("POSITIVE_INFINITY", CONST_INF, 0),
     JS_PROP_DOUBLE_DEF("EPSILON", 2.220446049250313e-16, 0),        /* ES6 */
     JS_PROP_DOUBLE_DEF("MAX_SAFE_INTEGER", 9007199254740991.0, 0),  /* ES6 */
     JS_PROP_DOUBLE_DEF("MIN_SAFE_INTEGER", -9007199254740991.0, 0), /* ES6 */
@@ -2215,7 +2219,7 @@ static const JSCFunctionListEntry js_global_funcs[] = {
     JS_CFUNC_DEF("parseInt", 2, js_parseInt), JS_CFUNC_DEF("parseFloat", 1, js_parseFloat), JS_CFUNC_DEF("isNaN", 1, js_global_isNaN), JS_CFUNC_DEF("isFinite", 1, js_global_isFinite),
     JS_CFUNC_MAGIC_DEF("decodeURI", 1, js_global_decodeURI, 0), JS_CFUNC_MAGIC_DEF("decodeURIComponent", 1, js_global_decodeURI, 1), JS_CFUNC_MAGIC_DEF("encodeURI", 1, js_global_encodeURI, 0),
     JS_CFUNC_MAGIC_DEF("encodeURIComponent", 1, js_global_encodeURI, 1), JS_CFUNC_DEF("escape", 1, js_global_escape), JS_CFUNC_DEF("unescape", 1, js_global_unescape),
-    JS_PROP_DOUBLE_DEF("Infinity", INFINITY, 0), JS_PROP_DOUBLE_DEF("NaN", NAN, 0), JS_PROP_UNDEFINED_DEF("undefined", 0),
+    JS_PROP_DOUBLE_DEF("Infinity", CONST_INF, 0), JS_PROP_DOUBLE_DEF("NaN", CONST_NAN, 0), JS_PROP_UNDEFINED_DEF("undefined", 0),
 
     /* for the 'Date' implementation */
     JS_CFUNC_DEF("__date_clock", 0, js___date_clock),

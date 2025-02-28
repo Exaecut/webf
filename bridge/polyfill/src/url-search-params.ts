@@ -137,7 +137,7 @@ export class URLSearchParams {
    * Returns a string containing a query string suitable for use in a URL. Does not include the question mark.
    */
   toString() {
-    var dict = this[DICT_KEY], query = [], i, key, name, value;
+    var dict = this[DICT_KEY], query: string[] = [], i, key, name, value;
     for (key in dict) {
       name = encode(key);
       for (i = 0, value = dict[key]; i < value.length; i++) {
