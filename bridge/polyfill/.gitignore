@@ -1,5 +1,6 @@
-dist
+dist/*
 !dist/polyfill.cc
 !dist/polyfill.h
 !dist/testframework.cc
+!dist/testframework.h
 package-lock.json
