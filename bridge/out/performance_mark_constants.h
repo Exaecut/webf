@@ -1,0 +1,138 @@
+// Generated from template:
+//   code_generator/src/json/templates/make_names.h.tmpl
+// and input files:
+//   E:\Projects\Exaecut\sources\webf\bridge\core\timing\performance_mark_constants.json5
+#ifndef PERFORMANCE_MARK_CONSTANTS_H_
+#define PERFORMANCE_MARK_CONSTANTS_H_
+#include "bindings/qjs/atomic_string.h"
+namespace webf {
+namespace performance_mark_constants {
+  extern thread_local const AtomicString& kwidget_creation_cost;
+  extern thread_local const AtomicString& kcontroller_properties_init_cost;
+  extern thread_local const AtomicString& kview_controller_properties_init_cost;
+  extern thread_local const AtomicString& kbridge_init_cost;
+  extern thread_local const AtomicString& kbridge_register_dart_method_cost;
+  extern thread_local const AtomicString& kcreate_viewport;
+  extern thread_local const AtomicString& kelement_manager_init_cost;
+  extern thread_local const AtomicString& kelement_manager_property_init_cost;
+  extern thread_local const AtomicString& kroot_element_init_cost;
+  extern thread_local const AtomicString& kroot_element_property_init_cost;
+  extern thread_local const AtomicString& kjs_context_init_cost;
+  extern thread_local const AtomicString& knative_method_init_cost;
+  extern thread_local const AtomicString& kpolyfill_init_cost;
+  extern thread_local const AtomicString& kjs_bundle_load_cost;
+  extern thread_local const AtomicString& kjs_bundle_eval_cost;
+  extern thread_local const AtomicString& kjs_parse_time_cost;
+  extern thread_local const AtomicString& kjs_host_class_init_cost;
+  extern thread_local const AtomicString& kjs_native_function_call_cost;
+  extern thread_local const AtomicString& kjs_host_class_get_property_cost;
+  extern thread_local const AtomicString& kjs_host_class_set_property_cost;
+  extern thread_local const AtomicString& kflush_ui_command_cost;
+  extern thread_local const AtomicString& kcreate_element_cost;
+  extern thread_local const AtomicString& kcreate_text_node_cost;
+  extern thread_local const AtomicString& kcreate_comment_cost;
+  extern thread_local const AtomicString& kdispose_event_target_cost;
+  extern thread_local const AtomicString& kadd_event_cost;
+  extern thread_local const AtomicString& kinsert_adjacent_node_cost;
+  extern thread_local const AtomicString& kremove_node_cost;
+  extern thread_local const AtomicString& kset_style_cost;
+  extern thread_local const AtomicString& kparse_css_cost;
+  extern thread_local const AtomicString& kparse_inline_css_cost;
+  extern thread_local const AtomicString& kmatch_element_rule_cost;
+  extern thread_local const AtomicString& kflush_style_cost;
+  extern thread_local const AtomicString& kdom_force_layout_cost;
+  extern thread_local const AtomicString& kdom_flush_ui_command_cost;
+  extern thread_local const AtomicString& kset_properties_cost;
+  extern thread_local const AtomicString& kremove_properties_cost;
+  extern thread_local const AtomicString& kflex_layout_cost;
+  extern thread_local const AtomicString& kflow_layout_cost;
+  extern thread_local const AtomicString& kintrinsic_layout_cost;
+  extern thread_local const AtomicString& ksilver_layout_cost;
+  extern thread_local const AtomicString& kpaint_cost;
+  extern thread_local const AtomicString& kcontroller_init_start;
+  extern thread_local const AtomicString& kcontroller_init_end;
+  extern thread_local const AtomicString& kcontroller_properties_init;
+  extern thread_local const AtomicString& kview_controller_init_start;
+  extern thread_local const AtomicString& kview_controller_property_init;
+  extern thread_local const AtomicString& kbridge_init_start;
+  extern thread_local const AtomicString& kbridge_init_end;
+  extern thread_local const AtomicString& kbridge_register_dart_method_start;
+  extern thread_local const AtomicString& kbridge_register_dart_method_end;
+  extern thread_local const AtomicString& kcreate_viewport_start;
+  extern thread_local const AtomicString& kcreate_viewport_end;
+  extern thread_local const AtomicString& kelement_manager_init_start;
+  extern thread_local const AtomicString& kelement_manager_init_end;
+  extern thread_local const AtomicString& kelement_manager_property_init;
+  extern thread_local const AtomicString& kroot_element_init_start;
+  extern thread_local const AtomicString& kroot_element_init_end;
+  extern thread_local const AtomicString& kroot_element_property_init;
+  extern thread_local const AtomicString& kjs_context_start;
+  extern thread_local const AtomicString& kjs_context_end;
+  extern thread_local const AtomicString& kjs_host_class_get_property_start;
+  extern thread_local const AtomicString& kjs_host_class_get_property_end;
+  extern thread_local const AtomicString& kjs_host_class_set_property_start;
+  extern thread_local const AtomicString& kjs_host_class_set_property_end;
+  extern thread_local const AtomicString& kjs_host_class_init_start;
+  extern thread_local const AtomicString& kjs_host_class_init_end;
+  extern thread_local const AtomicString& kjs_native_function_call_start;
+  extern thread_local const AtomicString& kjs_native_function_call_end;
+  extern thread_local const AtomicString& kinit_native_method_start;
+  extern thread_local const AtomicString& kinit_native_method_end;
+  extern thread_local const AtomicString& kinit_js_polyfill_start;
+  extern thread_local const AtomicString& kinit_js_polyfill_end;
+  extern thread_local const AtomicString& kjs_bundle_load_start;
+  extern thread_local const AtomicString& kjs_bundle_load_end;
+  extern thread_local const AtomicString& kjs_bundle_eval_start;
+  extern thread_local const AtomicString& kjs_bundle_eval_end;
+  extern thread_local const AtomicString& kjs_parse_time_start;
+  extern thread_local const AtomicString& kjs_parse_time_end;
+  extern thread_local const AtomicString& kflush_ui_command_start;
+  extern thread_local const AtomicString& kflush_ui_command_end;
+  extern thread_local const AtomicString& kcreate_element_start;
+  extern thread_local const AtomicString& kcreate_element_end;
+  extern thread_local const AtomicString& kcreate_text_node_start;
+  extern thread_local const AtomicString& kcreate_text_node_end;
+  extern thread_local const AtomicString& kcreate_comment_start;
+  extern thread_local const AtomicString& kcreate_comment_end;
+  extern thread_local const AtomicString& kdispose_event_target_start;
+  extern thread_local const AtomicString& kdispose_event_target_end;
+  extern thread_local const AtomicString& kadd_event_start;
+  extern thread_local const AtomicString& kadd_event_end;
+  extern thread_local const AtomicString& kinsert_adjacent_node_start;
+  extern thread_local const AtomicString& kinsert_adjacent_node_end;
+  extern thread_local const AtomicString& kremove_node_start;
+  extern thread_local const AtomicString& kremove_node_end;
+  extern thread_local const AtomicString& kset_style_start;
+  extern thread_local const AtomicString& kset_style_end;
+  extern thread_local const AtomicString& kparse_css_start;
+  extern thread_local const AtomicString& kparse_css_end;
+  extern thread_local const AtomicString& kparse_inline_css_start;
+  extern thread_local const AtomicString& kparse_inline_css_end;
+  extern thread_local const AtomicString& kmatch_element_rule_start;
+  extern thread_local const AtomicString& kmatch_element_rule_end;
+  extern thread_local const AtomicString& kflush_style_start;
+  extern thread_local const AtomicString& kflush_style_end;
+  extern thread_local const AtomicString& kdom_force_layout_start;
+  extern thread_local const AtomicString& kdom_force_layout_end;
+  extern thread_local const AtomicString& kdom_flush_ui_command_start;
+  extern thread_local const AtomicString& kdom_flush_ui_command_end;
+  extern thread_local const AtomicString& kset_properties_start;
+  extern thread_local const AtomicString& kset_properties_end;
+  extern thread_local const AtomicString& kremove_properties_start;
+  extern thread_local const AtomicString& kremove_properties_end;
+  extern thread_local const AtomicString& kflex_layout_start;
+  extern thread_local const AtomicString& kflex_layout_end;
+  extern thread_local const AtomicString& kflow_layout_start;
+  extern thread_local const AtomicString& kflow_layout_end;
+  extern thread_local const AtomicString& kintrinsic_layout_start;
+  extern thread_local const AtomicString& kintrinsic_layout_end;
+  extern thread_local const AtomicString& ksilver_layout_start;
+  extern thread_local const AtomicString& ksilver_layout_end;
+  extern thread_local const AtomicString& kpaint_start;
+  extern thread_local const AtomicString& kpaint_end;
+constexpr unsigned kNamesCount = 123;
+void Init(JSContext* ctx);
+void Dispose();
+}
+} // webf
+#endif  // #define PERFORMANCE_MARK_CONSTANTS
