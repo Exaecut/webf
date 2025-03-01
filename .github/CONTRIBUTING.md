@@ -61,6 +61,21 @@ $ npm run build:bridge:macos:release  # macOS
 
 ---
 
+**Windows**
+
+> You need to install `cmake` via chocolatey package manager to build webf and quickjs.
+
+
+```shell
+> choco install cmake
+```
+
+```shell
+> npm run build:bridge:windows:release  # windows
+```
+
+---
+
 
 ### Run Example
 
@@ -73,6 +88,7 @@ $ flutter run -d <platform>
 
 ```shell
 cd integration_tests
+npm install
 npm run integration
 ```
 
@@ -89,7 +105,7 @@ SPEC_SCOPE=DOM npm run integration // match pattern is located in `spec_group.js
 > Quicker start up if you changed the test specs only.
 
 ```shell
-npm run integration -- --skip-build
+npm run integration -- skip-build
 ```
 
 ### Run one test spec only

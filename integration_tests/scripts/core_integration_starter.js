@@ -17,7 +17,7 @@ function getRunningPlatform() {
 function startIntegrationTest(websocketPort) {
   const shouldSkipBuild = /skip\-build/.test(process.argv);
   if (!shouldSkipBuild) {
-    console.log('Building integration tests macOS application from "lib/main.dart"...');
+    console.log(`Building integration tests ${getRunningPlatform()} application from "lib/main.dart"...`);
     spawnSync('flutter', ['build', getRunningPlatform(), '--debug'], {
       stdio: 'inherit'
     });
