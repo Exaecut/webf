@@ -1,4 +1,5 @@
 xcschememanagement.plist
 
 cmake-build-*
-build
+build/*
+!build/macos/*
