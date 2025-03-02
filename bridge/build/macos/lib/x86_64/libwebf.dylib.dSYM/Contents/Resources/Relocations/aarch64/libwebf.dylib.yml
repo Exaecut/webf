@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/marvincano/Projects/webf/bridge/build/macos/lib/x86_64/libwebf.dylib'
+relocations:     []
+...
