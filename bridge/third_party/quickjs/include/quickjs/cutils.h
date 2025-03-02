@@ -26,6 +26,7 @@
 #define CUTILS_H
 
 #include <stdlib.h>
+#include <stdbool.h>
 #include <inttypes.h>
 
 #if ENABLE_MI_MALLOC

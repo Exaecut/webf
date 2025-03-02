@@ -158,7 +158,7 @@ if (${WEBF_JS_ENGINE} MATCHES "quickjs")
   endif()
 
   list(APPEND QUICK_JS_SOURCE
-    # third_party/quickjs/src/libbf.c
+    third_party/quickjs/src/libbf.c
     third_party/quickjs/src/cutils.c
     third_party/quickjs/src/libregexp.c
     third_party/quickjs/src/libunicode.c

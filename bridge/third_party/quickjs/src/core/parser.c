@@ -149,9 +149,9 @@ int __attribute__((format(printf, 2, 3))) js_parse_error(JSParseState *s, const 
   if (s->cur_func && s->cur_func->backtrace_barrier)
     backtrace_flags = JS_BACKTRACE_FLAG_SINGLE_LEVEL;
   int column_num = calc_column_position(s);
-  build_backtrace(ctx, ctx->rt->current_exception, 
+  build_backtrace(ctx, ctx->rt->current_exception,
                   s->filename, s->line_num,
-                  column_num < 0 ? -1 : column_num, 
+                  column_num < 0 ? -1 : column_num,
                   backtrace_flags);
   return -1;
 }
@@ -2652,9 +2652,9 @@ static __exception int js_parse_object_literal(JSParseState *s)
         else if (prop_type == PROP_TYPE_ASYNC_STAR)
           func_kind = JS_FUNC_ASYNC_GENERATOR;
       }
-      if (js_parse_function_decl(s, func_type, 
+      if (js_parse_function_decl(s, func_type,
                                  func_kind, JS_ATOM_NULL,
-                                 start_ptr, start_line, 
+                                 start_ptr, start_line,
                                  start_column))
         goto fail;
       if (name == JS_ATOM_NULL) {
@@ -3042,7 +3042,7 @@ static __exception int js_parse_class(JSParseState *s, BOOL is_class_expr,
       if (js_parse_function_decl2(s, JS_PARSE_FUNC_GETTER + is_set,
                                   JS_FUNC_NORMAL, JS_ATOM_NULL,
                                   start_ptr, s->token.line_num,
-                                  s->token.column_num, JS_PARSE_EXPORT_NONE, 
+                                  s->token.column_num, JS_PARSE_EXPORT_NONE,
                                   &method_fd))
         goto fail;
       if (is_private) {
@@ -3187,10 +3187,10 @@ static __exception int js_parse_class(JSParseState *s, BOOL is_class_expr,
         if (add_brand(s, &class_fields[is_static]) < 0)
           goto fail;
       }
-      if (js_parse_function_decl2(s, func_type, 
-                                  func_kind, JS_ATOM_NULL, 
-                                  start_ptr, s->token.line_num, 
-                                  s->token.column_num, JS_PARSE_EXPORT_NONE, 
+      if (js_parse_function_decl2(s, func_type,
+                                  func_kind, JS_ATOM_NULL,
+                                  start_ptr, s->token.line_num,
+                                  s->token.column_num, JS_PARSE_EXPORT_NONE,
                                   &method_fd))
         goto fail;
       if (func_type == JS_PARSE_FUNC_DERIVED_CLASS_CONSTRUCTOR ||
@@ -4883,7 +4883,7 @@ static __exception int js_parse_postfix_expr(JSParseState *s, int parse_flags)
     } else if (s->token.val == '.') {
       if (next_token(s))
         return -1;
-    
+
     column_num = s->token.column_num;
     emit_column(s, column_num);
     parse_property:
@@ -5165,7 +5165,7 @@ static __exception int js_parse_expr_binary(JSParseState *s, int level,
                                             int parse_flags)
 {
   int op, opcode;
-  
+
   if (level == 0) {
     return js_parse_unary(s, (parse_flags & PF_ARROW_FUNC) |
                                  PF_POW_ALLOWED);
@@ -7126,7 +7126,7 @@ static __exception int js_parse_export(JSParseState *s)
     return js_parse_function_decl2(s, JS_PARSE_FUNC_STATEMENT,
                                    JS_FUNC_NORMAL, JS_ATOM_NULL,
                                    s->token.ptr, s->token.line_num,
-                                   s->token.column_num, JS_PARSE_EXPORT_NAMED, 
+                                   s->token.column_num, JS_PARSE_EXPORT_NAMED,
                                    NULL);
   }
 
@@ -7237,7 +7237,7 @@ static __exception int js_parse_export(JSParseState *s)
         return js_parse_function_decl2(s, JS_PARSE_FUNC_STATEMENT,
                                        JS_FUNC_NORMAL, JS_ATOM_NULL,
                                        s->token.ptr, s->token.line_num,
-                                       s->token.column_num, JS_PARSE_EXPORT_DEFAULT, 
+                                       s->token.column_num, JS_PARSE_EXPORT_DEFAULT,
                                        NULL);
       } else {
         if (js_parse_assign_expr(s))
@@ -7459,8 +7459,8 @@ JSFunctionDef *js_new_function_def(JSContext *ctx,
                                           JSFunctionDef *parent,
                                           BOOL is_eval,
                                           BOOL is_func_expr,
-                                          const char *filename, 
-                                          int line_num, 
+                                          const char *filename,
+                                          int line_num,
                                           int column_num)
 {
   JSFunctionDef *fd;
@@ -9871,7 +9871,7 @@ static void add_pc2line_info(JSFunctionDef *s, uint32_t pc, int line_num)
 }
 
 /* the pc2col table gives a column number for each PC value */
-static void add_pc2col_info(JSFunctionDef *s, uint32_t pc, int column_num) 
+static void add_pc2col_info(JSFunctionDef *s, uint32_t pc, int column_num)
 {
   if(s->column_number_slots != NULL
      &&  s->column_number_count < s->column_number_size
@@ -9924,7 +9924,7 @@ static void compute_pc2line_info(JSFunctionDef *s)
   }
 }
 
-static void compute_pc2column_info(JSFunctionDef *s) 
+static void compute_pc2column_info(JSFunctionDef *s)
 {
   if(!(s->js_mode & JS_MODE_STRIP) && s->column_number_slots) {
     int last_column_num = s->column_num;
@@ -11649,8 +11649,8 @@ static JSFunctionDef *js_parse_function_class_fields_init(JSParseState *s)
 {
   JSFunctionDef *fd;
 
-  fd = js_new_function_def(s->ctx, s->cur_func, 
-                           FALSE, FALSE, s->filename, 
+  fd = js_new_function_def(s->ctx, s->cur_func,
+                           FALSE, FALSE, s->filename,
                            0, 0);
   if (!fd)
     return NULL;
@@ -11793,7 +11793,7 @@ static __exception int js_parse_function_decl2(JSParseState *s,
   }
 
   fd = js_new_function_def(ctx, fd, FALSE, is_expr,
-                           s->filename, function_line_num, 
+                           s->filename, function_line_num,
                            function_column_num);
   if (!fd) {
     JS_FreeAtom(ctx, func_name);
@@ -12232,7 +12232,7 @@ static __exception int js_parse_function_decl(JSParseState *s,
                                               int function_column_num)
 {
   return js_parse_function_decl2(s, func_type, func_kind, func_name, ptr,
-                                 function_line_num, function_column_num, 
+                                 function_line_num, function_column_num,
                                  JS_PARSE_EXPORT_NONE, NULL);
 }
 
