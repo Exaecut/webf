@@ -36,10 +36,12 @@ compile_commands.json
 
 # Gradle files
 .gradle/
-build/
+build/*
+!/bridge/build/*
 
 # Android Studio
-/*/build/
+/*/build/*
+!/bridge/build/*
 /*/local.properties
 /*/*/build
 /*/*/production
