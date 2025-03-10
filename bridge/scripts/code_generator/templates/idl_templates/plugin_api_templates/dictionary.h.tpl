@@ -1,4 +1,5 @@
 #include "webf_value.h"
+#include "foundation/native_value.h"
 
 namespace webf {
 
@@ -17,11 +18,11 @@ struct WebF<%= className %> {
   <% if (parentObject?.props) { %>
     <% _.forEach(parentObject.props, function(prop, index) { %>
       <% if (isStringType(prop.type)) { %>
-  <%= generatePublicReturnTypeValue(prop.type, true) %> <%= _.snakeCase(prop.name) %>;
+  <%= generatePublicDictionaryFieldTypeValue(prop.type, true) %> <%= _.snakeCase(prop.name) %>;
       <% } else if (prop.readonly) { %>
-  const <%= generatePublicReturnTypeValue(prop.type, true) %> <%= _.snakeCase(prop.name) %>;
+  const <%= generatePublicDictionaryFieldTypeValue(prop.type, true) %> <%= _.snakeCase(prop.name) %>;
       <% } else { %>
-  <%= generatePublicReturnTypeValue(prop.type, true) %> <%= _.snakeCase(prop.name) %>;
+  <%= generatePublicDictionaryFieldTypeValue(prop.type, true) %> <%= _.snakeCase(prop.name) %>;
       <% } %>
     <% }); %>
   <% } %>
@@ -29,11 +30,11 @@ struct WebF<%= className %> {
 
 <% _.forEach(object.props, function(prop, index) { %>
   <% if (isStringType(prop.type)) { %>
-  <%= generatePublicReturnTypeValue(prop.type, true) %> <%= _.snakeCase(prop.name) %>;
+  <%= generatePublicDictionaryFieldTypeValue(prop.type, true) %> <%= _.snakeCase(prop.name) %>;
   <% } else if (prop.readonly) { %>
-  const <%= generatePublicReturnTypeValue(prop.type, true) %> <%= _.snakeCase(prop.name) %>;
+  const <%= generatePublicDictionaryFieldTypeValue(prop.type, true) %> <%= _.snakeCase(prop.name) %>;
   <% } else { %>
-  <%= generatePublicReturnTypeValue(prop.type, true) %> <%= _.snakeCase(prop.name) %>;
+  <%= generatePublicDictionaryFieldTypeValue(prop.type, true) %> <%= _.snakeCase(prop.name) %>;
   <% } %>
 <% }); %>
 };

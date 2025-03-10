@@ -11,6 +11,7 @@
 #include "core/native/native_loader.h"
 #include "custom_event_init.h"
 #include "document.h"
+#include "error_event_init.h"
 #include "event_init.h"
 #include "exception_state.h"
 #include "focus_event_init.h"
@@ -19,8 +20,10 @@
 #include "hashchange_event_init.h"
 #include "input_event_init.h"
 #include "intersection_change_event_init.h"
+#include "message_event_init.h"
 #include "mouse_event_init.h"
 #include "pointer_event_init.h"
+#include "promise_rejection_event_init.h"
 #include "transition_event_init.h"
 #include "ui_event_init.h"
 #include "window.h"
@@ -38,18 +41,28 @@ class AnimationEvent;
 typedef struct AnimationEventPublicMethods AnimationEventPublicMethods;
 class CloseEvent;
 typedef struct CloseEventPublicMethods CloseEventPublicMethods;
+class ErrorEvent;
+typedef struct ErrorEventPublicMethods ErrorEventPublicMethods;
 class FocusEvent;
 typedef struct FocusEventPublicMethods FocusEventPublicMethods;
 class GestureEvent;
 typedef struct GestureEventPublicMethods GestureEventPublicMethods;
 class HashchangeEvent;
 typedef struct HashchangeEventPublicMethods HashchangeEventPublicMethods;
+class HybridRouterChangeEvent;
+typedef struct HybridRouterChangeEventPublicMethods HybridRouterChangeEventPublicMethods;
 class InputEvent;
 typedef struct InputEventPublicMethods InputEventPublicMethods;
 class IntersectionChangeEvent;
 typedef struct IntersectionChangeEventPublicMethods IntersectionChangeEventPublicMethods;
+class MessageEvent;
+typedef struct MessageEventPublicMethods MessageEventPublicMethods;
 class MouseEvent;
 typedef struct MouseEventPublicMethods MouseEventPublicMethods;
+class PopStateEvent;
+typedef struct PopStateEventPublicMethods PopStateEventPublicMethods;
+class PromiseRejectionEvent;
+typedef struct PromiseRejectionEventPublicMethods PromiseRejectionEventPublicMethods;
 class PointerEvent;
 typedef struct PointerEventPublicMethods PointerEventPublicMethods;
 class TransitionEvent;
@@ -130,6 +143,16 @@ using PublicContextCreateCustomEventWithOptions =
                                                          WebFCustomEventInit* init,
                                                          ExceptionState& exception_state);
 
+using PublicContextCreateErrorEvent =
+    WebFValue<ErrorEvent, ErrorEventPublicMethods> (*)(ExecutingContext* context,
+                                                       const char* type,
+                                                       ExceptionState& exception_state);
+using PublicContextCreateErrorEventWithOptions =
+    WebFValue<ErrorEvent, ErrorEventPublicMethods> (*)(ExecutingContext* context,
+                                                       const char* type,
+                                                       WebFErrorEventInit* init,
+                                                       ExceptionState& exception_state);
+
 using PublicContextCreateFocusEvent =
     WebFValue<FocusEvent, FocusEventPublicMethods> (*)(ExecutingContext* context,
                                                        const char* type,
@@ -160,6 +183,10 @@ using PublicContextCreateHashchangeEventWithOptions =
                                                                  WebFHashchangeEventInit* init,
                                                                  ExceptionState& exception_state);
 
+using PublicContextCreateHybridRouterChangeEvent =
+    WebFValue<HybridRouterChangeEvent, HybridRouterChangeEventPublicMethods> (*)(ExecutingContext* context,
+                                                                                 ExceptionState& exception_state);
+
 using PublicContextCreateInputEvent =
     WebFValue<InputEvent, InputEventPublicMethods> (*)(ExecutingContext* context,
                                                        const char* type,
@@ -180,6 +207,16 @@ using PublicContextCreateIntersectionChangeEventWithOptions =
                                                                                  WebFIntersectionChangeEventInit* init,
                                                                                  ExceptionState& exception_state);
 
+using PublicContextCreateMessageEvent =
+    WebFValue<MessageEvent, MessageEventPublicMethods> (*)(ExecutingContext* context,
+                                                           const char* type,
+                                                           ExceptionState& exception_state);
+using PublicContextCreateMessageEventWithOptions =
+    WebFValue<MessageEvent, MessageEventPublicMethods> (*)(ExecutingContext* context,
+                                                           const char* type,
+                                                           WebFMessageEventInit* init,
+                                                           ExceptionState& exception_state);
+
 using PublicContextCreateMouseEvent =
     WebFValue<MouseEvent, MouseEventPublicMethods> (*)(ExecutingContext* context,
                                                        const char* type,
@@ -189,6 +226,20 @@ using PublicContextCreateMouseEventWithOptions =
                                                        const char* type,
                                                        WebFMouseEventInit* init,
                                                        ExceptionState& exception_state);
+
+using PublicContextCreatePopStateEvent =
+    WebFValue<PopStateEvent, PopStateEventPublicMethods> (*)(ExecutingContext* context,
+                                                             ExceptionState& exception_state);
+
+using PublicContextCreatePromiseRejectionEvent =
+    WebFValue<PromiseRejectionEvent, PromiseRejectionEventPublicMethods> (*)(ExecutingContext* context,
+                                                                             const char* type,
+                                                                             ExceptionState& exception_state);
+using PublicContextCreatePromiseRejectionEventWithOptions =
+    WebFValue<PromiseRejectionEvent, PromiseRejectionEventPublicMethods> (*)(ExecutingContext* context,
+                                                                             const char* type,
+                                                                             WebFPromiseRejectionEventInit* init,
+                                                                             ExceptionState& exception_state);
 
 using PublicContextCreatePointerEvent =
     WebFValue<PointerEvent, PointerEventPublicMethods> (*)(ExecutingContext* context,
@@ -309,6 +360,14 @@ struct ExecutingContextWebFMethods {
                                                                                        WebFCustomEventInit* init,
                                                                                        ExceptionState& exception_state);
 
+  static WebFValue<ErrorEvent, ErrorEventPublicMethods> CreateErrorEvent(ExecutingContext* context,
+                                                                         const char* type,
+                                                                         ExceptionState& exception_state);
+  static WebFValue<ErrorEvent, ErrorEventPublicMethods> CreateErrorEventWithOptions(ExecutingContext* context,
+                                                                                    const char* type,
+                                                                                    WebFErrorEventInit* init,
+                                                                                    ExceptionState& exception_state);
+
   static WebFValue<FocusEvent, FocusEventPublicMethods> CreateFocusEvent(ExecutingContext* context,
                                                                          const char* type,
                                                                          ExceptionState& exception_state);
@@ -334,6 +393,10 @@ struct ExecutingContextWebFMethods {
       WebFHashchangeEventInit* init,
       ExceptionState& exception_state);
 
+  static WebFValue<HybridRouterChangeEvent, HybridRouterChangeEventPublicMethods> CreateHybridRouterChangeEvent(
+      ExecutingContext* context,
+      ExceptionState& exception_state);
+
   static WebFValue<InputEvent, InputEventPublicMethods> CreateInputEvent(ExecutingContext* context,
                                                                          const char* type,
                                                                          ExceptionState& exception_state);
@@ -350,6 +413,15 @@ struct ExecutingContextWebFMethods {
                                            WebFIntersectionChangeEventInit* init,
                                            ExceptionState& exception_state);
 
+  static WebFValue<MessageEvent, MessageEventPublicMethods> CreateMessageEvent(ExecutingContext* context,
+                                                                               const char* type,
+                                                                               ExceptionState& exception_state);
+  static WebFValue<MessageEvent, MessageEventPublicMethods> CreateMessageEventWithOptions(
+      ExecutingContext* context,
+      const char* type,
+      WebFMessageEventInit* init,
+      ExceptionState& exception_state);
+
   static WebFValue<MouseEvent, MouseEventPublicMethods> CreateMouseEvent(ExecutingContext* context,
                                                                          const char* type,
                                                                          ExceptionState& exception_state);
@@ -357,6 +429,17 @@ struct ExecutingContextWebFMethods {
                                                                                     const char* type,
                                                                                     WebFMouseEventInit* init,
                                                                                     ExceptionState& exception_state);
+
+  static WebFValue<PopStateEvent, PopStateEventPublicMethods> CreatePopStateEvent(ExecutingContext* context,
+                                                                                  ExceptionState& exception_state);
+
+  static WebFValue<PromiseRejectionEvent, PromiseRejectionEventPublicMethods>
+  CreatePromiseRejectionEvent(ExecutingContext* context, const char* type, ExceptionState& exception_state);
+  static WebFValue<PromiseRejectionEvent, PromiseRejectionEventPublicMethods> CreatePromiseRejectionEventWithOptions(
+      ExecutingContext* context,
+      const char* type,
+      WebFPromiseRejectionEventInit* init,
+      ExceptionState& exception_state);
 
   static WebFValue<PointerEvent, PointerEventPublicMethods> CreatePointerEvent(ExecutingContext* context,
                                                                                const char* type,
@@ -411,6 +494,8 @@ struct ExecutingContextWebFMethods {
   PublicContextCreateCloseEventWithOptions rust_context_create_close_event_with_options{CreateCloseEventWithOptions};
   PublicContextCreateCustomEvent rust_context_create_custom_event{CreateCustomEvent};
   PublicContextCreateCustomEventWithOptions rust_context_create_custom_event_with_options{CreateCustomEventWithOptions};
+  PublicContextCreateErrorEvent rust_context_create_error_event{CreateErrorEvent};
+  PublicContextCreateErrorEventWithOptions rust_context_create_error_event_with_options{CreateErrorEventWithOptions};
   PublicContextCreateFocusEvent rust_context_create_focus_event{CreateFocusEvent};
   PublicContextCreateFocusEventWithOptions rust_context_create_focus_event_with_options{CreateFocusEventWithOptions};
   PublicContextCreateGestureEvent rust_context_create_gesture_event{CreateGestureEvent};
@@ -419,14 +504,23 @@ struct ExecutingContextWebFMethods {
   PublicContextCreateHashchangeEvent rust_context_create_change_event{CreateHashchangeEvent};
   PublicContextCreateHashchangeEventWithOptions rust_context_create_change_event_with_options{
       CreateHashchangeEventWithOptions};
+  PublicContextCreateHybridRouterChangeEvent rust_context_create_hybrid_router_change_event{
+      CreateHybridRouterChangeEvent};
   PublicContextCreateInputEvent rust_context_create_input_event{CreateInputEvent};
   PublicContextCreateInputEventWithOptions rust_context_create_input_event_with_options{CreateInputEventWithOptions};
   PublicContextCreateIntersectionChangeEvent rust_context_create_intersection_change_event{
       CreateIntersectionChangeEvent};
   PublicContextCreateIntersectionChangeEventWithOptions rust_context_create_intersection_change_event_with_options{
       CreateIntersectionChangeEventWithOptions};
+  PublicContextCreateMessageEvent rust_context_create_message_event{CreateMessageEvent};
+  PublicContextCreateMessageEventWithOptions rust_context_create_message_event_with_options{
+      CreateMessageEventWithOptions};
   PublicContextCreateMouseEvent rust_context_create_mouse_event{CreateMouseEvent};
   PublicContextCreateMouseEventWithOptions rust_context_create_mouse_event_with_options{CreateMouseEventWithOptions};
+  PublicContextCreatePopStateEvent rust_context_create_pop_state_event{CreatePopStateEvent};
+  PublicContextCreatePromiseRejectionEvent rust_context_create_promise_rejection_event{CreatePromiseRejectionEvent};
+  PublicContextCreatePromiseRejectionEventWithOptions rust_context_create_promise_rejection_event_with_options{
+      CreatePromiseRejectionEventWithOptions};
   PublicContextCreatePointerEvent rust_context_create_pointer_event{CreatePointerEvent};
   PublicContextCreatePointerEventWithOptions rust_context_create_pointer_event_with_options{
       CreatePointerEventWithOptions};

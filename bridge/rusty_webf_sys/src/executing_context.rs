@@ -35,18 +35,26 @@ pub struct ExecutingContextRustMethods {
   pub create_close_event_with_options: extern "C" fn(*const OpaquePtr, *const c_char, options: *const CloseEventInit, exception_state: *const OpaquePtr ) -> RustValue<CloseEventRustMethods>,
   pub create_custom_event: extern "C" fn(*const OpaquePtr, *const c_char, exception_state: *const OpaquePtr ) -> RustValue<CustomEventRustMethods>,
   pub create_custom_event_with_options: extern "C" fn(*const OpaquePtr, *const c_char, options: *const CustomEventInit, exception_state: *const OpaquePtr ) -> RustValue<CustomEventRustMethods>,
+  pub create_error_event: extern "C" fn(*const OpaquePtr, *const c_char, exception_state: *const OpaquePtr ) -> RustValue<ErrorEventRustMethods>,
+  pub create_error_event_with_options: extern "C" fn(*const OpaquePtr, *const c_char, options: *const ErrorEventInit, exception_state: *const OpaquePtr ) -> RustValue<ErrorEventRustMethods>,
   pub create_focus_event: extern "C" fn(*const OpaquePtr, *const c_char, exception_state: *const OpaquePtr ) -> RustValue<FocusEventRustMethods>,
   pub create_focus_event_with_options: extern "C" fn(*const OpaquePtr, *const c_char, options: *const FocusEventInit, exception_state: *const OpaquePtr ) -> RustValue<FocusEventRustMethods>,
   pub create_gesture_event: extern "C" fn(*const OpaquePtr, *const c_char, exception_state: *const OpaquePtr ) -> RustValue<GestureEventRustMethods>,
   pub create_gesture_event_with_options: extern "C" fn(*const OpaquePtr, *const c_char, options: *const GestureEventInit, exception_state: *const OpaquePtr ) -> RustValue<GestureEventRustMethods>,
   pub create_hashchange_event: extern "C" fn(*const OpaquePtr, *const c_char, exception_state: *const OpaquePtr ) -> RustValue<HashchangeEventRustMethods>,
   pub create_hashchange_event_with_options: extern "C" fn(*const OpaquePtr, *const c_char, options: *const HashchangeEventInit, exception_state: *const OpaquePtr ) -> RustValue<HashchangeEventRustMethods>,
+  pub create_hybrid_router_change_event: extern "C" fn(*const OpaquePtr, exception_state: *const OpaquePtr ) -> RustValue<HybridRouterChangeEventRustMethods>,
   pub create_input_event: extern "C" fn(*const OpaquePtr, *const c_char, exception_state: *const OpaquePtr ) -> RustValue<InputEventRustMethods>,
   pub create_input_event_with_options: extern "C" fn(*const OpaquePtr, *const c_char, options: *const InputEventInit, exception_state: *const OpaquePtr ) -> RustValue<InputEventRustMethods>,
   pub create_intersection_change_event: extern "C" fn(*const OpaquePtr, *const c_char, exception_state: *const OpaquePtr ) -> RustValue<IntersectionChangeEventRustMethods>,
   pub create_intersection_change_event_with_options: extern "C" fn(*const OpaquePtr, *const c_char, options: *const IntersectionChangeEventInit, exception_state: *const OpaquePtr ) -> RustValue<IntersectionChangeEventRustMethods>,
+  pub create_message_event: extern "C" fn(*const OpaquePtr, *const c_char, exception_state: *const OpaquePtr ) -> RustValue<MessageEventRustMethods>,
+  pub create_message_event_with_options: extern "C" fn(*const OpaquePtr, *const c_char, options: *const MessageEventInit, exception_state: *const OpaquePtr ) -> RustValue<MessageEventRustMethods>,
   pub create_mouse_event: extern "C" fn(*const OpaquePtr, *const c_char, exception_state: *const OpaquePtr ) -> RustValue<MouseEventRustMethods>,
   pub create_mouse_event_with_options: extern "C" fn(*const OpaquePtr, *const c_char, options: *const MouseEventInit, exception_state: *const OpaquePtr ) -> RustValue<MouseEventRustMethods>,
+  pub create_pop_state_event: extern "C" fn(*const OpaquePtr, exception_state: *const OpaquePtr ) -> RustValue<PopStateEventRustMethods>,
+  pub create_promise_rejection_event: extern "C" fn(*const OpaquePtr, *const c_char, exception_state: *const OpaquePtr ) -> RustValue<PromiseRejectionEventRustMethods>,
+  pub create_promise_rejection_event_with_options: extern "C" fn(*const OpaquePtr, *const c_char, options: *const PromiseRejectionEventInit, exception_state: *const OpaquePtr ) -> RustValue<PromiseRejectionEventRustMethods>,
   pub create_pointer_event: extern "C" fn(*const OpaquePtr, *const c_char, exception_state: *const OpaquePtr ) -> RustValue<PointerEventRustMethods>,
   pub create_pointer_event_with_options: extern "C" fn(*const OpaquePtr, *const c_char, options: *const PointerEventInit, exception_state: *const OpaquePtr ) -> RustValue<PointerEventRustMethods>,
   pub create_transition_event: extern "C" fn(*const OpaquePtr, *const c_char, exception_state: *const OpaquePtr ) -> RustValue<TransitionEventRustMethods>,
@@ -117,6 +125,18 @@ impl ExecutingContext {
       ((*self.method_pointer).get_document)(self.ptr)
     };
     return Document::initialize::<DocumentRustMethods>(result.value, self, result.method_pointer, result.status);
+  }
+
+  pub fn location(&self) -> Location {
+    Location::initialize(self)
+  }
+
+  pub fn history(&self) -> History {
+    History::initialize(self)
+  }
+
+  pub fn hybrid_history(&self) -> HybridHistory {
+    HybridHistory::initialize(self)
   }
 
   pub fn navigator(&self) -> Navigator {
