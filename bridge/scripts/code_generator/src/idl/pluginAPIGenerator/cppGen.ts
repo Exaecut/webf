@@ -50,6 +50,10 @@ export function isStringType(type: ParameterType): boolean {
     || type.value === FunctionArgumentType.legacy_dom_string;
 }
 
+export function isVoidType(type: ParameterType): boolean {
+  return type.value === FunctionArgumentType.void;
+}
+
 function generatePublicReturnTypeValue(type: ParameterType, is32Bit: boolean = false): string {
   if (isPointerType(type)) {
     const pointerType = getPointerType(type);
@@ -70,11 +74,42 @@ function generatePublicReturnTypeValue(type: ParameterType, is32Bit: boolean = f
     }
     case FunctionArgumentType.dom_string:
     case FunctionArgumentType.legacy_dom_string: {
+      return 'AtomicStringRef';
+    }
+    case FunctionArgumentType.any: {
+      return 'NativeValue';
+    }
+    case FunctionArgumentType.void:
+      return 'void';
+    default:
       if (is32Bit) {
-        return 'const char*';
+        return 'int64_t';
       }
+      return 'void*';
+  }
+}
 
-      return 'SharedNativeString*';
+function generatePublicDictionaryFieldTypeValue(type: ParameterType, is32Bit: boolean = false): string {
+  if (isPointerType(type)) {
+    const pointerType = getPointerType(type);
+    return `WebFValue<${pointerType}, ${pointerType}PublicMethods>`;
+  }
+  switch (type.value) {
+    case FunctionArgumentType.int64: {
+      return 'int64_t';
+    }
+    case FunctionArgumentType.int32: {
+      return 'int64_t';
+    }
+    case FunctionArgumentType.double: {
+      return 'double';
+    }
+    case FunctionArgumentType.boolean: {
+      return 'int32_t';
+    }
+    case FunctionArgumentType.dom_string:
+    case FunctionArgumentType.legacy_dom_string: {
+      return 'const char*';
     }
     case FunctionArgumentType.any: {
       return 'NativeValue';
@@ -120,11 +155,7 @@ function generatePublicParameterType(type: ParameterType, is32Bit: boolean = fal
     }
     case FunctionArgumentType.dom_string:
     case FunctionArgumentType.legacy_dom_string: {
-      if (is32Bit) {
-        return 'const char*';
-      }
-
-      return 'SharedNativeString*';
+      return 'const char*';
     }
     default:
       if (is32Bit) {
@@ -215,6 +246,7 @@ function generatePluginAPIHeaderFile(blob: IDLBlob, options: GenerateOptions) {
           parentClassName: object.parent,
           blob: blob,
           object,
+          generatePublicParameterType,
           generatePublicReturnTypeValue,
           generatePublicParametersType,
           generatePublicParametersTypeWithName,
@@ -257,7 +289,7 @@ function generatePluginAPIHeaderFile(blob: IDLBlob, options: GenerateOptions) {
           parentObjects,
           blob: blob,
           object,
-          generatePublicReturnTypeValue,
+          generatePublicDictionaryFieldTypeValue,
           isStringType,
           dependentTypes: Array.from(dependentTypes),
           options,
@@ -360,6 +392,7 @@ function generatePluginAPISourceFile(blob: IDLBlob, options: GenerateOptions) {
           getPointerType,
           isStringType,
           isAnyType,
+          isVoidType,
           dependentTypes: Array.from(dependentTypes),
           dependentClasses,
           subClasses: _.uniq(subClasses),

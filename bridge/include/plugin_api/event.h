@@ -15,21 +15,27 @@ typedef struct EventTargetPublicMethods EventTargetPublicMethods;
 class SharedExceptionState;
 class ExecutingContext;
 typedef struct NativeValue NativeValue;
+typedef struct AtomicStringRef AtomicStringRef;
 class Event;
 enum class EventType {
   kEvent = 0,
   kCustomEvent = 1,
-  kAnimationEvent = 2,
+  kGestureEvent = 2,
   kCloseEvent = 3,
-  kGestureEvent = 4,
-  kHashchangeEvent = 5,
-  kIntersectionChangeEvent = 6,
-  kTransitionEvent = 7,
-  kUIEvent = 8,
-  kFocusEvent = 9,
-  kInputEvent = 10,
-  kMouseEvent = 11,
-  kPointerEvent = 12,
+  kHybridRouterChangeEvent = 4,
+  kAnimationEvent = 5,
+  kMessageEvent = 6,
+  kErrorEvent = 7,
+  kIntersectionChangeEvent = 8,
+  kUIEvent = 9,
+  kFocusEvent = 10,
+  kInputEvent = 11,
+  kMouseEvent = 12,
+  kPointerEvent = 13,
+  kPopStateEvent = 14,
+  kTransitionEvent = 15,
+  kPromiseRejectionEvent = 16,
+  kHashchangeEvent = 17,
 };
 using PublicEventGetBubbles = int32_t (*)(Event*);
 using PublicEventGetCancelBubble = int32_t (*)(Event*);
@@ -41,8 +47,7 @@ using PublicEventGetSrcElement = WebFValue<EventTarget, EventTargetPublicMethods
 using PublicEventGetTarget = WebFValue<EventTarget, EventTargetPublicMethods> (*)(Event*);
 using PublicEventGetIsTrusted = int32_t (*)(Event*);
 using PublicEventGetTimeStamp = double (*)(Event*);
-using PublicEventGetType = const char* (*)(Event*);
-using PublicEventDupType = const char* (*)(Event*);
+using PublicEventGetType = AtomicStringRef (*)(Event*);
 using PublicEventInitEvent = void (*)(Event*, const char*, int32_t, int32_t, SharedExceptionState*);
 using PublicEventPreventDefault = void (*)(Event*, SharedExceptionState*);
 using PublicEventStopImmediatePropagation = void (*)(Event*, SharedExceptionState*);
@@ -60,8 +65,7 @@ struct EventPublicMethods : public WebFPublicMethods {
   static WebFValue<EventTarget, EventTargetPublicMethods> Target(Event* event);
   static int32_t IsTrusted(Event* event);
   static double TimeStamp(Event* event);
-  static const char* Type(Event* event);
-  static const char* DupType(Event* event);
+  static AtomicStringRef Type(Event* event);
   static void InitEvent(Event* event, const char* type, int32_t bubbles, int32_t cancelable, SharedExceptionState* shared_exception_state);
   static void PreventDefault(Event* event, SharedExceptionState* shared_exception_state);
   static void StopImmediatePropagation(Event* event, SharedExceptionState* shared_exception_state);
@@ -80,7 +84,6 @@ struct EventPublicMethods : public WebFPublicMethods {
   PublicEventGetIsTrusted event_get_is_trusted{IsTrusted};
   PublicEventGetTimeStamp event_get_time_stamp{TimeStamp};
   PublicEventGetType event_get_type{Type};
-  PublicEventDupType event_dup_type{DupType};
   PublicEventInitEvent event_init_event{InitEvent};
   PublicEventPreventDefault event_prevent_default{PreventDefault};
   PublicEventStopImmediatePropagation event_stop_immediate_propagation{StopImmediatePropagation};
