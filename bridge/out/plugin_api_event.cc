@@ -19,11 +19,26 @@
 #include "core/events/hashchange_event.h"
 #include "core/events/input_event.h"
 #include "core/events/intersection_change_event.h"
+#include "core/events/pop_state_event.h"
 #include "core/events/mouse_event.h"
 #include "core/api/exception_state.h"
 #include "core/events/pointer_event.h"
 #include "core/events/transition_event.h"
 #include "core/events/ui_event.h"
+#include "core/dom/legacy/element_attributes.h"
+#include "core/css/inline_css_style_declaration.h"
+#include "core/css/computed_css_style_declaration.h"
+#include "core/dom/legacy/bounding_client_rect.h"
+#include "core/dom/dom_string_map.h"
+#include "core/timing/performance_mark.h"
+#include "core/dom/mutation_observer_registration.h"
+#include "core/input/touch_list.h"
+#include "core/input/touch.h"
+#include "core/timing/performance_measure.h"
+#include "core/events/promise_rejection_event.h"
+#include "core/events/hybrid_router_change_event.h"
+#include "core/events/error_event.h"
+#include "core/events/message_event.h"
 #include "plugin_api/event_init.h"
 namespace webf {
 int32_t EventPublicMethods::Bubbles(Event* event) {
@@ -62,25 +77,22 @@ int32_t EventPublicMethods::IsTrusted(Event* event) {
 double EventPublicMethods::TimeStamp(Event* event) {
   return event->timeStamp();
 }
-const char* EventPublicMethods::Type(Event* event) {
-  return event->type().ToStringView().Characters8();
-}
-const char* EventPublicMethods::DupType(Event* event) {
-  const char* buffer = event->type().ToStringView().Characters8();
-  return strdup(buffer);
+AtomicStringRef EventPublicMethods::Type(Event* event) {
+  auto value_atomic = event->type();
+  return AtomicStringRef(value_atomic);
 }
 void EventPublicMethods::InitEvent(Event* event, const char* type, int32_t bubbles, int32_t cancelable, SharedExceptionState* shared_exception_state) {
   webf::AtomicString type_atomic = webf::AtomicString(event->ctx(), type);
-  return event->initEvent(type_atomic, bubbles, cancelable, shared_exception_state->exception_state);
+  event->initEvent(type_atomic, bubbles, cancelable, shared_exception_state->exception_state);
 }
 void EventPublicMethods::PreventDefault(Event* event, SharedExceptionState* shared_exception_state) {
-  return event->preventDefault(shared_exception_state->exception_state);
+  event->preventDefault(shared_exception_state->exception_state);
 }
 void EventPublicMethods::StopImmediatePropagation(Event* event, SharedExceptionState* shared_exception_state) {
-  return event->stopImmediatePropagation(shared_exception_state->exception_state);
+  event->stopImmediatePropagation(shared_exception_state->exception_state);
 }
 void EventPublicMethods::StopPropagation(Event* event, SharedExceptionState* shared_exception_state) {
-  return event->stopPropagation(shared_exception_state->exception_state);
+  event->stopPropagation(shared_exception_state->exception_state);
 }
 void EventPublicMethods::Release(Event* event) {
   event->ReleaseAlive();
@@ -99,13 +111,13 @@ WebFValue<Event, WebFPublicMethods> EventPublicMethods::DynamicTo(webf::Event* e
       WebFValueStatus* status_block = custom_event->KeepAlive();
       return WebFValue<Event, WebFPublicMethods>(custom_event, custom_event->customEventPublicMethods(), status_block);
     }
-    case EventType::kAnimationEvent: {
-      auto* animation_event = webf::DynamicTo<AnimationEvent>(event);
-      if (animation_event == nullptr) {
+    case EventType::kGestureEvent: {
+      auto* gesture_event = webf::DynamicTo<GestureEvent>(event);
+      if (gesture_event == nullptr) {
         return WebFValue<Event, WebFPublicMethods>::Null();
       }
-      WebFValueStatus* status_block = animation_event->KeepAlive();
-      return WebFValue<Event, WebFPublicMethods>(animation_event, animation_event->animationEventPublicMethods(), status_block);
+      WebFValueStatus* status_block = gesture_event->KeepAlive();
+      return WebFValue<Event, WebFPublicMethods>(gesture_event, gesture_event->gestureEventPublicMethods(), status_block);
     }
     case EventType::kCloseEvent: {
       auto* close_event = webf::DynamicTo<CloseEvent>(event);
@@ -115,21 +127,37 @@ WebFValue<Event, WebFPublicMethods> EventPublicMethods::DynamicTo(webf::Event* e
       WebFValueStatus* status_block = close_event->KeepAlive();
       return WebFValue<Event, WebFPublicMethods>(close_event, close_event->closeEventPublicMethods(), status_block);
     }
-    case EventType::kGestureEvent: {
-      auto* gesture_event = webf::DynamicTo<GestureEvent>(event);
-      if (gesture_event == nullptr) {
+    case EventType::kHybridRouterChangeEvent: {
+      auto* hybrid_router_change_event = webf::DynamicTo<HybridRouterChangeEvent>(event);
+      if (hybrid_router_change_event == nullptr) {
         return WebFValue<Event, WebFPublicMethods>::Null();
       }
-      WebFValueStatus* status_block = gesture_event->KeepAlive();
-      return WebFValue<Event, WebFPublicMethods>(gesture_event, gesture_event->gestureEventPublicMethods(), status_block);
+      WebFValueStatus* status_block = hybrid_router_change_event->KeepAlive();
+      return WebFValue<Event, WebFPublicMethods>(hybrid_router_change_event, hybrid_router_change_event->hybridRouterChangeEventPublicMethods(), status_block);
     }
-    case EventType::kHashchangeEvent: {
-      auto* hashchange_event = webf::DynamicTo<HashchangeEvent>(event);
-      if (hashchange_event == nullptr) {
+    case EventType::kAnimationEvent: {
+      auto* animation_event = webf::DynamicTo<AnimationEvent>(event);
+      if (animation_event == nullptr) {
         return WebFValue<Event, WebFPublicMethods>::Null();
       }
-      WebFValueStatus* status_block = hashchange_event->KeepAlive();
-      return WebFValue<Event, WebFPublicMethods>(hashchange_event, hashchange_event->hashchangeEventPublicMethods(), status_block);
+      WebFValueStatus* status_block = animation_event->KeepAlive();
+      return WebFValue<Event, WebFPublicMethods>(animation_event, animation_event->animationEventPublicMethods(), status_block);
+    }
+    case EventType::kMessageEvent: {
+      auto* message_event = webf::DynamicTo<MessageEvent>(event);
+      if (message_event == nullptr) {
+        return WebFValue<Event, WebFPublicMethods>::Null();
+      }
+      WebFValueStatus* status_block = message_event->KeepAlive();
+      return WebFValue<Event, WebFPublicMethods>(message_event, message_event->messageEventPublicMethods(), status_block);
+    }
+    case EventType::kErrorEvent: {
+      auto* error_event = webf::DynamicTo<ErrorEvent>(event);
+      if (error_event == nullptr) {
+        return WebFValue<Event, WebFPublicMethods>::Null();
+      }
+      WebFValueStatus* status_block = error_event->KeepAlive();
+      return WebFValue<Event, WebFPublicMethods>(error_event, error_event->errorEventPublicMethods(), status_block);
     }
     case EventType::kIntersectionChangeEvent: {
       auto* intersection_change_event = webf::DynamicTo<IntersectionChangeEvent>(event);
@@ -138,14 +166,6 @@ WebFValue<Event, WebFPublicMethods> EventPublicMethods::DynamicTo(webf::Event* e
       }
       WebFValueStatus* status_block = intersection_change_event->KeepAlive();
       return WebFValue<Event, WebFPublicMethods>(intersection_change_event, intersection_change_event->intersectionChangeEventPublicMethods(), status_block);
-    }
-    case EventType::kTransitionEvent: {
-      auto* transition_event = webf::DynamicTo<TransitionEvent>(event);
-      if (transition_event == nullptr) {
-        return WebFValue<Event, WebFPublicMethods>::Null();
-      }
-      WebFValueStatus* status_block = transition_event->KeepAlive();
-      return WebFValue<Event, WebFPublicMethods>(transition_event, transition_event->transitionEventPublicMethods(), status_block);
     }
     case EventType::kUIEvent: {
       auto* ui_event = webf::DynamicTo<UIEvent>(event);
@@ -187,14 +207,46 @@ WebFValue<Event, WebFPublicMethods> EventPublicMethods::DynamicTo(webf::Event* e
       WebFValueStatus* status_block = pointer_event->KeepAlive();
       return WebFValue<Event, WebFPublicMethods>(pointer_event, pointer_event->pointerEventPublicMethods(), status_block);
     }
+    case EventType::kPopStateEvent: {
+      auto* pop_state_event = webf::DynamicTo<PopStateEvent>(event);
+      if (pop_state_event == nullptr) {
+        return WebFValue<Event, WebFPublicMethods>::Null();
+      }
+      WebFValueStatus* status_block = pop_state_event->KeepAlive();
+      return WebFValue<Event, WebFPublicMethods>(pop_state_event, pop_state_event->popStateEventPublicMethods(), status_block);
+    }
+    case EventType::kTransitionEvent: {
+      auto* transition_event = webf::DynamicTo<TransitionEvent>(event);
+      if (transition_event == nullptr) {
+        return WebFValue<Event, WebFPublicMethods>::Null();
+      }
+      WebFValueStatus* status_block = transition_event->KeepAlive();
+      return WebFValue<Event, WebFPublicMethods>(transition_event, transition_event->transitionEventPublicMethods(), status_block);
+    }
+    case EventType::kPromiseRejectionEvent: {
+      auto* promise_rejection_event = webf::DynamicTo<PromiseRejectionEvent>(event);
+      if (promise_rejection_event == nullptr) {
+        return WebFValue<Event, WebFPublicMethods>::Null();
+      }
+      WebFValueStatus* status_block = promise_rejection_event->KeepAlive();
+      return WebFValue<Event, WebFPublicMethods>(promise_rejection_event, promise_rejection_event->promiseRejectionEventPublicMethods(), status_block);
+    }
+    case EventType::kHashchangeEvent: {
+      auto* hashchange_event = webf::DynamicTo<HashchangeEvent>(event);
+      if (hashchange_event == nullptr) {
+        return WebFValue<Event, WebFPublicMethods>::Null();
+      }
+      WebFValueStatus* status_block = hashchange_event->KeepAlive();
+      return WebFValue<Event, WebFPublicMethods>(hashchange_event, hashchange_event->hashchangeEventPublicMethods(), status_block);
+    }
     default:
       assert_m(false, ("Unknown EventType " + std::to_string(static_cast<int32_t>(event_type))).c_str());
       return WebFValue<Event, WebFPublicMethods>::Null();
   }
 }
-WebFValue<Event, EventPublicMethods> ExecutingContextWebFMethods::CreateEvent(ExecutingContext* context,  const char* type, ExceptionState& exception_state) {
+WebFValue<Event, EventPublicMethods> ExecutingContextWebFMethods::CreateEvent(ExecutingContext* context, const char* type, ExceptionState& exception_state) {
   AtomicString type_atomic = AtomicString(context->ctx(), type);
-  Event* event = Event::Create(context,  type_atomic,  exception_state);
+  Event* event = Event::Create(context, type_atomic, exception_state);
   WebFValueStatus* status_block = event->KeepAlive();
   return WebFValue<Event, EventPublicMethods>(event, event->eventPublicMethods(), status_block);
 };

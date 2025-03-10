@@ -19,11 +19,26 @@
 #include "core/events/hashchange_event.h"
 #include "core/events/input_event.h"
 #include "core/events/intersection_change_event.h"
+#include "core/events/pop_state_event.h"
 #include "core/events/mouse_event.h"
 #include "core/api/exception_state.h"
 #include "core/events/pointer_event.h"
 #include "core/events/transition_event.h"
 #include "core/events/ui_event.h"
+#include "core/dom/legacy/element_attributes.h"
+#include "core/css/inline_css_style_declaration.h"
+#include "core/css/computed_css_style_declaration.h"
+#include "core/dom/legacy/bounding_client_rect.h"
+#include "core/dom/dom_string_map.h"
+#include "core/timing/performance_mark.h"
+#include "core/dom/mutation_observer_registration.h"
+#include "core/input/touch_list.h"
+#include "core/input/touch.h"
+#include "core/timing/performance_measure.h"
+#include "core/events/promise_rejection_event.h"
+#include "core/events/hybrid_router_change_event.h"
+#include "core/events/error_event.h"
+#include "core/events/message_event.h"
 #include "plugin_api/pointer_event_init.h"
 namespace webf {
 double PointerEventPublicMethods::Height(PointerEvent* pointer_event) {
@@ -35,12 +50,9 @@ int32_t PointerEventPublicMethods::IsPrimary(PointerEvent* pointer_event) {
 double PointerEventPublicMethods::PointerId(PointerEvent* pointer_event) {
   return pointer_event->pointerId();
 }
-const char* PointerEventPublicMethods::PointerType(PointerEvent* pointer_event) {
-  return pointer_event->pointerType().ToStringView().Characters8();
-}
-const char* PointerEventPublicMethods::DupPointerType(PointerEvent* pointer_event) {
-  const char* buffer = pointer_event->pointerType().ToStringView().Characters8();
-  return strdup(buffer);
+AtomicStringRef PointerEventPublicMethods::PointerType(PointerEvent* pointer_event) {
+  auto value_atomic = pointer_event->pointerType();
+  return AtomicStringRef(value_atomic);
 }
 double PointerEventPublicMethods::Pressure(PointerEvent* pointer_event) {
   return pointer_event->pressure();
@@ -60,9 +72,9 @@ double PointerEventPublicMethods::Twist(PointerEvent* pointer_event) {
 double PointerEventPublicMethods::Width(PointerEvent* pointer_event) {
   return pointer_event->width();
 }
-WebFValue<PointerEvent, PointerEventPublicMethods> ExecutingContextWebFMethods::CreatePointerEvent(ExecutingContext* context,  const char* type, ExceptionState& exception_state) {
+WebFValue<PointerEvent, PointerEventPublicMethods> ExecutingContextWebFMethods::CreatePointerEvent(ExecutingContext* context, const char* type, ExceptionState& exception_state) {
   AtomicString type_atomic = AtomicString(context->ctx(), type);
-  PointerEvent* event = PointerEvent::Create(context,  type_atomic,  exception_state);
+  PointerEvent* event = PointerEvent::Create(context, type_atomic, exception_state);
   WebFValueStatus* status_block = event->KeepAlive();
   return WebFValue<PointerEvent, PointerEventPublicMethods>(event, event->pointerEventPublicMethods(), status_block);
 };

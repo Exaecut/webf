@@ -19,11 +19,26 @@
 #include "core/events/hashchange_event.h"
 #include "core/events/input_event.h"
 #include "core/events/intersection_change_event.h"
+#include "core/events/pop_state_event.h"
 #include "core/events/mouse_event.h"
 #include "core/api/exception_state.h"
 #include "core/events/pointer_event.h"
 #include "core/events/transition_event.h"
 #include "core/events/ui_event.h"
+#include "core/dom/legacy/element_attributes.h"
+#include "core/css/inline_css_style_declaration.h"
+#include "core/css/computed_css_style_declaration.h"
+#include "core/dom/legacy/bounding_client_rect.h"
+#include "core/dom/dom_string_map.h"
+#include "core/timing/performance_mark.h"
+#include "core/dom/mutation_observer_registration.h"
+#include "core/input/touch_list.h"
+#include "core/input/touch.h"
+#include "core/timing/performance_measure.h"
+#include "core/events/promise_rejection_event.h"
+#include "core/events/hybrid_router_change_event.h"
+#include "core/events/error_event.h"
+#include "core/events/message_event.h"
 #include "plugin_api/mouse_event_init.h"
 namespace webf {
 double MouseEventPublicMethods::Button(MouseEvent* mouse_event) {
@@ -41,9 +56,9 @@ double MouseEventPublicMethods::OffsetX(MouseEvent* mouse_event) {
 double MouseEventPublicMethods::OffsetY(MouseEvent* mouse_event) {
   return mouse_event->offsetY();
 }
-WebFValue<MouseEvent, MouseEventPublicMethods> ExecutingContextWebFMethods::CreateMouseEvent(ExecutingContext* context,  const char* type, ExceptionState& exception_state) {
+WebFValue<MouseEvent, MouseEventPublicMethods> ExecutingContextWebFMethods::CreateMouseEvent(ExecutingContext* context, const char* type, ExceptionState& exception_state) {
   AtomicString type_atomic = AtomicString(context->ctx(), type);
-  MouseEvent* event = MouseEvent::Create(context,  type_atomic,  exception_state);
+  MouseEvent* event = MouseEvent::Create(context, type_atomic, exception_state);
   WebFValueStatus* status_block = event->KeepAlive();
   return WebFValue<MouseEvent, MouseEventPublicMethods>(event, event->mouseEventPublicMethods(), status_block);
 };

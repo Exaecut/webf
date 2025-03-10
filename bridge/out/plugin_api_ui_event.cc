@@ -19,11 +19,26 @@
 #include "core/events/hashchange_event.h"
 #include "core/events/input_event.h"
 #include "core/events/intersection_change_event.h"
+#include "core/events/pop_state_event.h"
 #include "core/events/mouse_event.h"
 #include "core/api/exception_state.h"
 #include "core/events/pointer_event.h"
 #include "core/events/transition_event.h"
 #include "core/events/ui_event.h"
+#include "core/dom/legacy/element_attributes.h"
+#include "core/css/inline_css_style_declaration.h"
+#include "core/css/computed_css_style_declaration.h"
+#include "core/dom/legacy/bounding_client_rect.h"
+#include "core/dom/dom_string_map.h"
+#include "core/timing/performance_mark.h"
+#include "core/dom/mutation_observer_registration.h"
+#include "core/input/touch_list.h"
+#include "core/input/touch.h"
+#include "core/timing/performance_measure.h"
+#include "core/events/promise_rejection_event.h"
+#include "core/events/hybrid_router_change_event.h"
+#include "core/events/error_event.h"
+#include "core/events/message_event.h"
 #include "plugin_api/ui_event_init.h"
 namespace webf {
 double UIEventPublicMethods::Detail(UIEvent* ui_event) {
@@ -37,9 +52,9 @@ WebFValue<Window, WindowPublicMethods> UIEventPublicMethods::View(UIEvent* ui_ev
 double UIEventPublicMethods::Which(UIEvent* ui_event) {
   return ui_event->which();
 }
-WebFValue<UIEvent, UIEventPublicMethods> ExecutingContextWebFMethods::CreateUIEvent(ExecutingContext* context,  const char* type, ExceptionState& exception_state) {
+WebFValue<UIEvent, UIEventPublicMethods> ExecutingContextWebFMethods::CreateUIEvent(ExecutingContext* context, const char* type, ExceptionState& exception_state) {
   AtomicString type_atomic = AtomicString(context->ctx(), type);
-  UIEvent* event = UIEvent::Create(context,  type_atomic,  exception_state);
+  UIEvent* event = UIEvent::Create(context, type_atomic, exception_state);
   WebFValueStatus* status_block = event->KeepAlive();
   return WebFValue<UIEvent, UIEventPublicMethods>(event, event->uiEventPublicMethods(), status_block);
 };

@@ -19,33 +19,42 @@
 #include "core/events/hashchange_event.h"
 #include "core/events/input_event.h"
 #include "core/events/intersection_change_event.h"
+#include "core/events/pop_state_event.h"
 #include "core/events/mouse_event.h"
 #include "core/api/exception_state.h"
 #include "core/events/pointer_event.h"
 #include "core/events/transition_event.h"
 #include "core/events/ui_event.h"
+#include "core/dom/legacy/element_attributes.h"
+#include "core/css/inline_css_style_declaration.h"
+#include "core/css/computed_css_style_declaration.h"
+#include "core/dom/legacy/bounding_client_rect.h"
+#include "core/dom/dom_string_map.h"
+#include "core/timing/performance_mark.h"
+#include "core/dom/mutation_observer_registration.h"
+#include "core/input/touch_list.h"
+#include "core/input/touch.h"
+#include "core/timing/performance_measure.h"
+#include "core/events/promise_rejection_event.h"
+#include "core/events/hybrid_router_change_event.h"
+#include "core/events/error_event.h"
+#include "core/events/message_event.h"
 #include "plugin_api/transition_event_init.h"
 namespace webf {
 double TransitionEventPublicMethods::ElapsedTime(TransitionEvent* transition_event) {
   return transition_event->elapsedTime();
 }
-const char* TransitionEventPublicMethods::PropertyName(TransitionEvent* transition_event) {
-  return transition_event->propertyName().ToStringView().Characters8();
+AtomicStringRef TransitionEventPublicMethods::PropertyName(TransitionEvent* transition_event) {
+  auto value_atomic = transition_event->propertyName();
+  return AtomicStringRef(value_atomic);
 }
-const char* TransitionEventPublicMethods::DupPropertyName(TransitionEvent* transition_event) {
-  const char* buffer = transition_event->propertyName().ToStringView().Characters8();
-  return strdup(buffer);
+AtomicStringRef TransitionEventPublicMethods::PseudoElement(TransitionEvent* transition_event) {
+  auto value_atomic = transition_event->pseudoElement();
+  return AtomicStringRef(value_atomic);
 }
-const char* TransitionEventPublicMethods::PseudoElement(TransitionEvent* transition_event) {
-  return transition_event->pseudoElement().ToStringView().Characters8();
-}
-const char* TransitionEventPublicMethods::DupPseudoElement(TransitionEvent* transition_event) {
-  const char* buffer = transition_event->pseudoElement().ToStringView().Characters8();
-  return strdup(buffer);
-}
-WebFValue<TransitionEvent, TransitionEventPublicMethods> ExecutingContextWebFMethods::CreateTransitionEvent(ExecutingContext* context,  const char* type, ExceptionState& exception_state) {
+WebFValue<TransitionEvent, TransitionEventPublicMethods> ExecutingContextWebFMethods::CreateTransitionEvent(ExecutingContext* context, const char* type, ExceptionState& exception_state) {
   AtomicString type_atomic = AtomicString(context->ctx(), type);
-  TransitionEvent* event = TransitionEvent::Create(context,  type_atomic,  exception_state);
+  TransitionEvent* event = TransitionEvent::Create(context, type_atomic, exception_state);
   WebFValueStatus* status_block = event->KeepAlive();
   return WebFValue<TransitionEvent, TransitionEventPublicMethods>(event, event->transitionEventPublicMethods(), status_block);
 };

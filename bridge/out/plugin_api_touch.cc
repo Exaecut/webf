@@ -4,7 +4,7 @@
 /*
  * Copyright (C) 2022-present The WebF authors. All rights reserved.
  */
-#include "plugin_api/focus_event.h"
+#include "plugin_api/touch.h"
 #include "plugin_api/event_target.h"
 #include "plugin_api/exception_state.h"
 #include "plugin_api/executing_context.h"
@@ -39,31 +39,63 @@
 #include "core/events/hybrid_router_change_event.h"
 #include "core/events/error_event.h"
 #include "core/events/message_event.h"
-#include "plugin_api/focus_event_init.h"
 namespace webf {
-WebFValue<EventTarget, EventTargetPublicMethods> FocusEventPublicMethods::RelatedTarget(FocusEvent* focus_event) {
-  auto* result = focus_event->relatedTarget();
+double TouchPublicMethods::AltitudeAngle(Touch* touch) {
+  return touch->altitudeAngle();
+}
+double TouchPublicMethods::AzimuthAngle(Touch* touch) {
+  return touch->azimuthAngle();
+}
+double TouchPublicMethods::ClientX(Touch* touch) {
+  return touch->clientX();
+}
+double TouchPublicMethods::ClientY(Touch* touch) {
+  return touch->clientY();
+}
+double TouchPublicMethods::Force(Touch* touch) {
+  return touch->force();
+}
+double TouchPublicMethods::Identifier(Touch* touch) {
+  return touch->identifier();
+}
+double TouchPublicMethods::PageX(Touch* touch) {
+  return touch->pageX();
+}
+double TouchPublicMethods::PageY(Touch* touch) {
+  return touch->pageY();
+}
+double TouchPublicMethods::RadiusX(Touch* touch) {
+  return touch->radiusX();
+}
+double TouchPublicMethods::RadiusY(Touch* touch) {
+  return touch->radiusY();
+}
+double TouchPublicMethods::RotationAngle(Touch* touch) {
+  return touch->rotationAngle();
+}
+double TouchPublicMethods::ScreenX(Touch* touch) {
+  return touch->screenX();
+}
+double TouchPublicMethods::ScreenY(Touch* touch) {
+  return touch->screenY();
+}
+WebFValue<EventTarget, EventTargetPublicMethods> TouchPublicMethods::Target(Touch* touch) {
+  auto* result = touch->target();
   WebFValueStatus* status_block = result->KeepAlive();
   return WebFValue<EventTarget, EventTargetPublicMethods>(result, result->eventTargetPublicMethods(), status_block);
 }
-WebFValue<FocusEvent, FocusEventPublicMethods> ExecutingContextWebFMethods::CreateFocusEvent(ExecutingContext* context, const char* type, ExceptionState& exception_state) {
-  AtomicString type_atomic = AtomicString(context->ctx(), type);
-  FocusEvent* event = FocusEvent::Create(context, type_atomic, exception_state);
-  WebFValueStatus* status_block = event->KeepAlive();
-  return WebFValue<FocusEvent, FocusEventPublicMethods>(event, event->focusEventPublicMethods(), status_block);
-};
-WebFValue<FocusEvent, FocusEventPublicMethods> ExecutingContextWebFMethods::CreateFocusEventWithOptions(ExecutingContext* context, const char* type, WebFFocusEventInit* init,  ExceptionState& exception_state) {
-  AtomicString type_atomic = AtomicString(context->ctx(), type);
-  std::shared_ptr<FocusEventInit> init_class = FocusEventInit::Create();
-  init_class->setRelatedTarget(init->related_target.value);
-  init_class->setDetail(init->detail);
-  init_class->setView(init->view.value);
-  init_class->setWhich(init->which);
-  init_class->setBubbles(init->bubbles);
-  init_class->setCancelable(init->cancelable);
-  init_class->setComposed(init->composed);
-  FocusEvent* event = FocusEvent::Create(context, type_atomic, init_class, exception_state);
-  WebFValueStatus* status_block = event->KeepAlive();
-  return WebFValue<FocusEvent, FocusEventPublicMethods>(event, event->focusEventPublicMethods(), status_block);
-};
+void TouchPublicMethods::Release(Touch* touch) {
+  touch->ReleaseAlive();
+}
+WebFValue<Touch, WebFPublicMethods> TouchPublicMethods::DynamicTo(webf::Touch* touch, webf::TouchType touch_type) {
+  switch (touch_type) {
+    case TouchType::kTouch: {
+      WebFValueStatus* status_block = touch->KeepAlive();
+      return WebFValue<Touch, WebFPublicMethods>(touch, touch->touchPublicMethods(), status_block);
+    }
+    default:
+      assert_m(false, ("Unknown TouchType " + std::to_string(static_cast<int32_t>(touch_type))).c_str());
+      return WebFValue<Touch, WebFPublicMethods>::Null();
+  }
+}
 }  // namespace webf

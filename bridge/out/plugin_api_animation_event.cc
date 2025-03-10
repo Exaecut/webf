@@ -19,33 +19,42 @@
 #include "core/events/hashchange_event.h"
 #include "core/events/input_event.h"
 #include "core/events/intersection_change_event.h"
+#include "core/events/pop_state_event.h"
 #include "core/events/mouse_event.h"
 #include "core/api/exception_state.h"
 #include "core/events/pointer_event.h"
 #include "core/events/transition_event.h"
 #include "core/events/ui_event.h"
+#include "core/dom/legacy/element_attributes.h"
+#include "core/css/inline_css_style_declaration.h"
+#include "core/css/computed_css_style_declaration.h"
+#include "core/dom/legacy/bounding_client_rect.h"
+#include "core/dom/dom_string_map.h"
+#include "core/timing/performance_mark.h"
+#include "core/dom/mutation_observer_registration.h"
+#include "core/input/touch_list.h"
+#include "core/input/touch.h"
+#include "core/timing/performance_measure.h"
+#include "core/events/promise_rejection_event.h"
+#include "core/events/hybrid_router_change_event.h"
+#include "core/events/error_event.h"
+#include "core/events/message_event.h"
 #include "plugin_api/animation_event_init.h"
 namespace webf {
-const char* AnimationEventPublicMethods::AnimationName(AnimationEvent* animation_event) {
-  return animation_event->animationName().ToStringView().Characters8();
-}
-const char* AnimationEventPublicMethods::DupAnimationName(AnimationEvent* animation_event) {
-  const char* buffer = animation_event->animationName().ToStringView().Characters8();
-  return strdup(buffer);
+AtomicStringRef AnimationEventPublicMethods::AnimationName(AnimationEvent* animation_event) {
+  auto value_atomic = animation_event->animationName();
+  return AtomicStringRef(value_atomic);
 }
 double AnimationEventPublicMethods::ElapsedTime(AnimationEvent* animation_event) {
   return animation_event->elapsedTime();
 }
-const char* AnimationEventPublicMethods::PseudoElement(AnimationEvent* animation_event) {
-  return animation_event->pseudoElement().ToStringView().Characters8();
+AtomicStringRef AnimationEventPublicMethods::PseudoElement(AnimationEvent* animation_event) {
+  auto value_atomic = animation_event->pseudoElement();
+  return AtomicStringRef(value_atomic);
 }
-const char* AnimationEventPublicMethods::DupPseudoElement(AnimationEvent* animation_event) {
-  const char* buffer = animation_event->pseudoElement().ToStringView().Characters8();
-  return strdup(buffer);
-}
-WebFValue<AnimationEvent, AnimationEventPublicMethods> ExecutingContextWebFMethods::CreateAnimationEvent(ExecutingContext* context,  const char* type, ExceptionState& exception_state) {
+WebFValue<AnimationEvent, AnimationEventPublicMethods> ExecutingContextWebFMethods::CreateAnimationEvent(ExecutingContext* context, const char* type, ExceptionState& exception_state) {
   AtomicString type_atomic = AtomicString(context->ctx(), type);
-  AnimationEvent* event = AnimationEvent::Create(context,  type_atomic,  exception_state);
+  AnimationEvent* event = AnimationEvent::Create(context, type_atomic, exception_state);
   WebFValueStatus* status_block = event->KeepAlive();
   return WebFValue<AnimationEvent, AnimationEventPublicMethods>(event, event->animationEventPublicMethods(), status_block);
 };

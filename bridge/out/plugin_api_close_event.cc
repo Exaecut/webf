@@ -19,29 +19,41 @@
 #include "core/events/hashchange_event.h"
 #include "core/events/input_event.h"
 #include "core/events/intersection_change_event.h"
+#include "core/events/pop_state_event.h"
 #include "core/events/mouse_event.h"
 #include "core/api/exception_state.h"
 #include "core/events/pointer_event.h"
 #include "core/events/transition_event.h"
 #include "core/events/ui_event.h"
+#include "core/dom/legacy/element_attributes.h"
+#include "core/css/inline_css_style_declaration.h"
+#include "core/css/computed_css_style_declaration.h"
+#include "core/dom/legacy/bounding_client_rect.h"
+#include "core/dom/dom_string_map.h"
+#include "core/timing/performance_mark.h"
+#include "core/dom/mutation_observer_registration.h"
+#include "core/input/touch_list.h"
+#include "core/input/touch.h"
+#include "core/timing/performance_measure.h"
+#include "core/events/promise_rejection_event.h"
+#include "core/events/hybrid_router_change_event.h"
+#include "core/events/error_event.h"
+#include "core/events/message_event.h"
 #include "plugin_api/close_event_init.h"
 namespace webf {
 int64_t CloseEventPublicMethods::Code(CloseEvent* close_event) {
   return close_event->code();
 }
-const char* CloseEventPublicMethods::Reason(CloseEvent* close_event) {
-  return close_event->reason().ToStringView().Characters8();
-}
-const char* CloseEventPublicMethods::DupReason(CloseEvent* close_event) {
-  const char* buffer = close_event->reason().ToStringView().Characters8();
-  return strdup(buffer);
+AtomicStringRef CloseEventPublicMethods::Reason(CloseEvent* close_event) {
+  auto value_atomic = close_event->reason();
+  return AtomicStringRef(value_atomic);
 }
 int32_t CloseEventPublicMethods::WasClean(CloseEvent* close_event) {
   return close_event->wasClean();
 }
-WebFValue<CloseEvent, CloseEventPublicMethods> ExecutingContextWebFMethods::CreateCloseEvent(ExecutingContext* context,  const char* type, ExceptionState& exception_state) {
+WebFValue<CloseEvent, CloseEventPublicMethods> ExecutingContextWebFMethods::CreateCloseEvent(ExecutingContext* context, const char* type, ExceptionState& exception_state) {
   AtomicString type_atomic = AtomicString(context->ctx(), type);
-  CloseEvent* event = CloseEvent::Create(context,  type_atomic,  exception_state);
+  CloseEvent* event = CloseEvent::Create(context, type_atomic, exception_state);
   WebFValueStatus* status_block = event->KeepAlive();
   return WebFValue<CloseEvent, CloseEventPublicMethods>(event, event->closeEventPublicMethods(), status_block);
 };

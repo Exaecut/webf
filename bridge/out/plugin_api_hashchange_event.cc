@@ -19,30 +19,39 @@
 #include "core/events/hashchange_event.h"
 #include "core/events/input_event.h"
 #include "core/events/intersection_change_event.h"
+#include "core/events/pop_state_event.h"
 #include "core/events/mouse_event.h"
 #include "core/api/exception_state.h"
 #include "core/events/pointer_event.h"
 #include "core/events/transition_event.h"
 #include "core/events/ui_event.h"
+#include "core/dom/legacy/element_attributes.h"
+#include "core/css/inline_css_style_declaration.h"
+#include "core/css/computed_css_style_declaration.h"
+#include "core/dom/legacy/bounding_client_rect.h"
+#include "core/dom/dom_string_map.h"
+#include "core/timing/performance_mark.h"
+#include "core/dom/mutation_observer_registration.h"
+#include "core/input/touch_list.h"
+#include "core/input/touch.h"
+#include "core/timing/performance_measure.h"
+#include "core/events/promise_rejection_event.h"
+#include "core/events/hybrid_router_change_event.h"
+#include "core/events/error_event.h"
+#include "core/events/message_event.h"
 #include "plugin_api/hashchange_event_init.h"
 namespace webf {
-const char* HashchangeEventPublicMethods::NewURL(HashchangeEvent* hashchange_event) {
-  return hashchange_event->newURL().ToStringView().Characters8();
+AtomicStringRef HashchangeEventPublicMethods::NewURL(HashchangeEvent* hashchange_event) {
+  auto value_atomic = hashchange_event->newURL();
+  return AtomicStringRef(value_atomic);
 }
-const char* HashchangeEventPublicMethods::DupNewURL(HashchangeEvent* hashchange_event) {
-  const char* buffer = hashchange_event->newURL().ToStringView().Characters8();
-  return strdup(buffer);
+AtomicStringRef HashchangeEventPublicMethods::OldURL(HashchangeEvent* hashchange_event) {
+  auto value_atomic = hashchange_event->oldURL();
+  return AtomicStringRef(value_atomic);
 }
-const char* HashchangeEventPublicMethods::OldURL(HashchangeEvent* hashchange_event) {
-  return hashchange_event->oldURL().ToStringView().Characters8();
-}
-const char* HashchangeEventPublicMethods::DupOldURL(HashchangeEvent* hashchange_event) {
-  const char* buffer = hashchange_event->oldURL().ToStringView().Characters8();
-  return strdup(buffer);
-}
-WebFValue<HashchangeEvent, HashchangeEventPublicMethods> ExecutingContextWebFMethods::CreateHashchangeEvent(ExecutingContext* context,  const char* type, ExceptionState& exception_state) {
+WebFValue<HashchangeEvent, HashchangeEventPublicMethods> ExecutingContextWebFMethods::CreateHashchangeEvent(ExecutingContext* context, const char* type, ExceptionState& exception_state) {
   AtomicString type_atomic = AtomicString(context->ctx(), type);
-  HashchangeEvent* event = HashchangeEvent::Create(context,  type_atomic,  exception_state);
+  HashchangeEvent* event = HashchangeEvent::Create(context, type_atomic, exception_state);
   WebFValueStatus* status_block = event->KeepAlive();
   return WebFValue<HashchangeEvent, HashchangeEventPublicMethods>(event, event->hashchangeEventPublicMethods(), status_block);
 };

@@ -37,12 +37,12 @@ JSValue QJSPromiseRejectionEvent::ConstructorCallback(JSContext* ctx, JSValue fu
   MemberMutationScope scope{context};
   PromiseRejectionEvent* return_value = nullptr;
   do {  // Dummy loop for use of 'break'.
-    auto&& args_eventType = Converter<IDLDOMString>::FromValue(ctx, argv[0], exception_state);
+    auto&& args_type = Converter<IDLDOMString>::FromValue(ctx, argv[0], exception_state);
     if (UNLIKELY(exception_state.HasException())) {
       return exception_state.ToQuickJS();
     }
     if (argc <= 1) {
-      return_value = PromiseRejectionEvent::Create(context, args_eventType,exception_state);
+      return_value = PromiseRejectionEvent::Create(context, args_type,exception_state);
       break;
     }
     auto&& args_init = Converter<IDLOptional<PromiseRejectionEventInit>>::FromValue(ctx, argv[1], exception_state);
@@ -50,10 +50,10 @@ JSValue QJSPromiseRejectionEvent::ConstructorCallback(JSContext* ctx, JSValue fu
       return exception_state.ToQuickJS();
     }
     if (argc <= 2) {
-      return_value = PromiseRejectionEvent::Create(context, args_eventType,args_init, exception_state);
+      return_value = PromiseRejectionEvent::Create(context, args_type,args_init, exception_state);
       break;
     }
-    return_value = PromiseRejectionEvent::Create(context, args_eventType,args_init, exception_state);
+    return_value = PromiseRejectionEvent::Create(context, args_type,args_init, exception_state);
   } while (false);
    context->dartIsolateContext()->profiler()->FinishTrackSteps();
   if (UNLIKELY(exception_state.HasException())) {
